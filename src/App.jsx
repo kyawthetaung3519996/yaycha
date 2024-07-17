@@ -1,11 +1,12 @@
-import { useContext, useState } from "react"
-import Item from "./Item"
-import List from "./List"
-import Form from "./Form";
-import { AppContent } from "./ThemedApp";
+import { useState } from "react"
+import Item from "./components/Item"
+import Form from "./components/Form";
+import { useApp } from "./ThemedApp";
+import Header from "./components/Header";
+import { Box, Container } from "@mui/material";
 
 function App() {
-  const { mode, setMode } = useContext(AppContent);
+  const { showForm, setGlobalMsg } = useApp();
 
   const [data, setData] = useState([
     { id: 1, content: "Hello how are you?", name: "Kyaw Thet"},
@@ -15,48 +16,33 @@ function App() {
 
   const remove = id => {
     setData(data.filter(item => item.id !== id));
+    setGlobalMsg("An item deleted");
   };
 
   const add = (content, name) => {
     const id = data[data.length - 1].id + 1;
     setData([...data, {id, content, name}])
+    setGlobalMsg("An item added");
   }
 
   return (
-    <div style={{
-      minHeight: 1500,
-      paddingTop: 20,
-      background: mode === "dark" ? "black" : "white",
-      color: mode === "dark" ? "white" : "black"
-    }}>
-      <div style={{ maxWidth: 600, margin: "20px auto" }}>
-        <h1>
-          Yaycha
-          <button
-            onClick={() =>
-              setMode(mode === "dark" ? "light" : "dark")
-            }
-            style={{
-              marginLeft: 8,
-              padding: "0 20px",
-              height: 32,
-              borderRadius: 32,
-              border: "0 none",
-              background: mode === "dark" ? "#333" : "#ddd",
-              color: mode === "dark" ? "white" : "black"
-            }}
-          >
-            { mode === "dark" ? "Light" : "Dark" }
-          </button>
-        </h1>
-        <Form add={add}/>
-        <List>
-          {data.map(item => {
-            return <Item key={item.id} item={item} remove={remove} />
-          })}
-        </List>
-      </div>
-    </div>
+    <Box>
+      <Header />
+      <Container
+        maxWidth="sm"
+        sx={{ mt: 4 }}>
+        {showForm && <Form add={add} />}
+        {data.map(item => {
+          return (
+            <Item
+            key={item.id}
+            item={item}
+            remove={remove}
+            />
+          );
+        })}
+      </Container>
+    </Box>
   );
 }
 
