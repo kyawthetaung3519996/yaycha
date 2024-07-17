@@ -1,35 +1,35 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react"
+import Item from "./Item"
+import List from "./List"
+import Form from "./Form";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [data, setData] = useState([
+    { id: 1, content: "Hello how are you?", name: "Kyaw Thet"},
+    { id: 2, content: "Hi how are you?", name: "Ko Thet"},
+    { id: 3, content: "Hey how are you?", name: "Kyaw Min"},
+  ]);
+
+  const remove = id => {
+    setData(data.filter(item => item.id !== id));
+  };
+
+  const add = (content, name) => {
+    const id = data[data.length - 1].id + 1;
+    setData([...data, {id, content, name}])
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div style={{ maxWidth: 600, margin: "20px auto" }}>
+      <h1>Yaycha</h1>
+      <Form add={add}/>
+      <List>
+        {data.map(item => {
+          return <Item key={item.id} item={item} remove={remove} />
+        })}
+      </List>
+    </div>
+  );
 }
 
 export default App
