@@ -1,6 +1,8 @@
-import { useRef } from "react";
+import { useContext, useRef } from "react";
+import { AppContent } from "./ThemedApp";
 
 function Form({ add }) {
+  const { mode } = useContext(AppContent)
   const nameRef = useRef();
   const contentRef = useRef();
   return (
@@ -22,7 +24,7 @@ function Form({ add }) {
         padding: 10,
         borderRadius: 8,
         marginBottom: 20,
-        background: "#def"
+        background: mode === "dark" ? "#555" : "#def"
       }}
     >
       <input type="text" ref={contentRef} placeholder="Content" style={{ padding: 5 }} />
