@@ -8,12 +8,28 @@ import {
 } from "@mui/material";
 import { deepPurple, grey } from "@mui/material/colors";
 import AppDrawer from "./components/AppDrawer";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Template from "./Template";
+import Home from "./pages/Home";
 
 const AppContext = createContext();
 
 export function useApp() {
   return useContext(AppContext);
 }
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Template />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      }
+    ],
+  },
+]);
 
 function ThemedApp() {
   const [showForm, setShowForm] = useState(false);
@@ -50,18 +66,7 @@ function ThemedApp() {
           auth,
           setAuth,
         }}>
-        <App />
-        <AppDrawer />
-        <Snackbar
-          anchorOrigin={{
-          horizontal: "center",
-          vertical: "bottom",
-          }}
-          open={Boolean(globalMsg)}
-          autoHideDuration={6000}
-          onClose={() => setGlobalMsg(null)}
-          message={globalMsg}
-        />
+        <RouterProvider router={router} />
         <CssBaseline />
       </AppContext.Provider>
     </ThemeProvider>
